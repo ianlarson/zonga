@@ -140,7 +140,7 @@ def ask_for_variables():
 if __name__ == '__main__':
 
     if len(argv) < 2:
-        exit('Must provide aws profile name from credentials file')
+        exit('Must provide aws profile name from credentials file(type "default" if needed)')
         # You can also add a -t after the profile name to terminate instances after they are created
         # for debugging purposes
     else:
