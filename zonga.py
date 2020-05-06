@@ -7,12 +7,12 @@ from sys import argv
 
 
 def create_instance(imageid='', instancetype='', securitygroups='',
-                    nametag='', subnetid='', count=''):
+                    nametag='', subnetid='', count='', keyname=''):
     response = ec2.run_instances(MinCount=count,
                                  MaxCount=count,
                                  ImageId=imageid,
                                  InstanceType=instancetype,
-                                 KeyName='Isengard1',
+                                 KeyName=keyname,
                                  NetworkInterfaces=[
                                      {'DeviceIndex': 0,
                                       'AssociatePublicIpAddress': True,
@@ -78,6 +78,7 @@ def import_config():
     global name
     global instype
     global image_id
+    global key_name
 
     with open('zonga.config', 'r') as config_file:
         file = json.loads(config_file.read())
@@ -87,6 +88,7 @@ def import_config():
         name = file['nametag']
         instype = file['instype']
         image_id = file['image_id']
+        key_name = file['key_name']
 
     print(f"--- Values from config file ---\n\n"
           f"Security Groups: {secgrps}\n"
@@ -95,6 +97,7 @@ def import_config():
           f"Name tag value: {name}\n"
           f"Number of instances: {numins}\n"
           f"Image ID: {image_id}\n"
+          f"Key Name: {key_name}\n"
           )
 
     yn = input('Do these values look good? [y|n]: ')
@@ -111,6 +114,7 @@ def ask_for_variables():
     global subid
     global secgrps
     global image_id
+    global keyname
 
     numins_input = input(f"How many instances to spin up(default {numins})? ")
     if numins_input:
@@ -136,6 +140,10 @@ def ask_for_variables():
     if image_id_input:
         image_id = image_id_input
 
+    key_name_input = input(f"What Image ID to use(Default: {image_id})?")
+    if key_name_input:
+        key_name = key_name_input
+
 
 if __name__ == '__main__':
 
@@ -156,7 +164,8 @@ if __name__ == '__main__':
                                  instancetype=instype,
                                  securitygroups=secgrps,
                                  subnetid=subid,
-                                 imageid=image_id
+                                 imageid=image_id,
+                                 keyname=key_name
                                  )
 
     if make_it_so['ResponseMetadata']['HTTPStatusCode'] == 200:
