@@ -140,7 +140,7 @@ def ask_for_variables():
     if image_id_input:
         image_id = image_id_input
 
-    key_name_input = input(f"What Image ID to use(Default: {image_id})?")
+    key_name_input = input(f"What security key to use(Default: {keyname})?")
     if key_name_input:
         key_name = key_name_input
 
